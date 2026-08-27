@@ -90,3 +90,31 @@ export const isAvailableForDonation = value => {
 
 export const getLastHospital = donor =>
   donor?.last_hospital || extractHospitalFromDonation(donor?.last_donation);
+
+export const buildDonationRecord = ({
+  donorId,
+  name,
+  blood_group,
+  phone,
+  donation_date,
+  hospital,
+  created_by,
+}) => ({
+  donor_id: donorId || '',
+  name: name || '',
+  blood_group: blood_group || '',
+  phone: phone || '',
+  donation_date: donation_date || '',
+  hospital: hospital || '',
+  created_by: created_by || '',
+  created_at_ms: Date.now(),
+});
+
+export const sortDonationsNewest = list =>
+  [...list].sort((a, b) => {
+    const ta =
+      a.created_at_ms || parseDonationDate(a.donation_date)?.valueOf() || 0;
+    const tb =
+      b.created_at_ms || parseDonationDate(b.donation_date)?.valueOf() || 0;
+    return tb - ta;
+  });

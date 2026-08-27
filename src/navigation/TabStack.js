@@ -38,7 +38,7 @@ const TabStack = () => {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color, size}) => (
-            <Icons family="Feather" name="home" size={size} color={color} />
+            <Icons family="Feather" name="activity" size={size} color={color} />
           ),
         }}
       />

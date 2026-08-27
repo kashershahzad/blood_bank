@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
@@ -24,6 +25,7 @@ import Icons from '../../../components/Icons';
 
 import {ToastMessage} from '../../../utils/ToastMessage';
 import {
+  buildDonationRecord,
   formatDonationDate,
   getDonationElapsedLabel,
   getLastHospital,
@@ -143,10 +145,25 @@ const DonorDetail = ({navigation, route}) => {
 
     try {
       setSaving(true);
+      const donationPayload = buildDonationRecord({
+        donorId: donor.id,
+        name: donor.name,
+        blood_group: donor.blood_group,
+        phone: donor.phone,
+        donation_date: lastDonation,
+        hospital: hospital.trim(),
+        created_by: auth().currentUser?.uid || '',
+      });
       await firestore().collection('donors').doc(donor.id).update({
         last_donation: lastDonation,
         last_hospital: hospital.trim(),
       });
+      await firestore()
+        .collection('donations')
+        .add({
+          ...donationPayload,
+          created_at: firestore.FieldValue.serverTimestamp(),
+        });
       setDonor(prev => ({
         ...prev,
         last_donation: lastDonation,

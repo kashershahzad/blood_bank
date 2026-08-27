@@ -20,7 +20,7 @@ import CustomText from '../../../components/CustomText';
 import Icons from '../../../components/Icons';
 
 import {ToastMessage} from '../../../utils/ToastMessage';
-import {formatDonationDate, parseDonationDate} from '../../../utils/donation';
+import {formatDonationDate, parseDonationDate, buildDonationRecord} from '../../../utils/donation';
 import {regEmail} from '../../../utils/constants';
 import {COLORS} from '../../../utils/COLORS';
 import fonts from '../../../assets/fonts';
@@ -181,12 +181,28 @@ const DonorForm = ({navigation, route}) => {
         await firestore().collection('donors').doc(item.id).update(payload);
         ToastMessage('Donor updated', 'success');
       } else {
-        await firestore()
+        const ref = await firestore()
           .collection('donors')
           .add({
             ...payload,
             created_by: currentUser.uid,
           });
+        if (payload.last_donation) {
+          await firestore()
+            .collection('donations')
+            .add({
+              ...buildDonationRecord({
+                donorId: ref.id,
+                name: payload.name,
+                blood_group: payload.blood_group,
+                phone: payload.phone,
+                donation_date: payload.last_donation,
+                hospital: payload.last_hospital,
+                created_by: currentUser.uid,
+              }),
+              created_at: firestore.FieldValue.serverTimestamp(),
+            });
+        }
         ToastMessage('Donor added', 'success');
       }
       navigation.goBack();

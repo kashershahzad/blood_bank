@@ -4,6 +4,7 @@ import React from 'react';
 import InboxScreen from '../screens/Main/Chat/InboxScreen';
 import Notifications from '../screens/Main/Notifications';
 import DonorDetail from '../screens/Main/Home/DonorDetail';
+import AllDonations from '../screens/Main/Home/AllDonations';
 import ContactPicker from '../screens/Main/AddUser/ContactPicker';
 import DonorForm from '../screens/Main/AddUser/DonorForm';
 import TabStack from './TabStack';
@@ -23,6 +24,7 @@ const MainStack = () => {
         options={{contentStyle: {flex: 1}}}
       />
       <Stack.Screen name="DonorDetail" component={DonorDetail} />
+      <Stack.Screen name="AllDonations" component={AllDonations} />
       <Stack.Screen name="DonorForm" component={DonorForm} />
       <Stack.Screen name="ContactPicker" component={ContactPicker} />
       <Stack.Screen name="InboxScreen" component={InboxScreen} />

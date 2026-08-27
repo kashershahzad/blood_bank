@@ -26,9 +26,11 @@ import fonts from '../../../assets/fonts';
 
 const BLOOD_GROUPS = ['All', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-const FindDonor = ({navigation}) => {
+const FindDonor = ({navigation, route}) => {
   const [donors, setDonors] = useState([]);
-  const [selectedGroup, setSelectedGroup] = useState('All');
+  const [selectedGroup, setSelectedGroup] = useState(
+    route?.params?.group || 'All',
+  );
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -64,8 +66,10 @@ const FindDonor = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      const group = route?.params?.group;
+      if (group) setSelectedGroup(group);
       fetchDonors();
-    }, [fetchDonors]),
+    }, [fetchDonors, route?.params?.group]),
   );
 
   const filteredDonors = useMemo(() => {
