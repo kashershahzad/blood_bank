@@ -1,0 +1,13 @@
+{
+  "name": "app-contacts",
+  "version": "1.0.0",
+  "description": "Read device contacts for Blood Bank",
+  "main": "index.js",
+  "react-native": "index.js",
+  "license": "MIT",
+  "author": "Blood Bank",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
